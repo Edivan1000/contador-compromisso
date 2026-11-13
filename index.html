@@ -360,6 +360,14 @@
     document.addEventListener('visibilitychange', () => {
       if (!document.hidden) updateCounter();
     });
+
+    const flipCard = document.getElementById('flipCard');
+
+flipCard.addEventListener('click', () => {
+  flipCard.classList.toggle('flipped');
+});
+    
+    
   </script>
 </body>
 </html>
