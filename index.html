@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101914">
+  <title>Meu Compromisso | Contagem Regressiva</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0c120f;
+      --panel: #141e18;
+      --panel-2: #1b2921;
+      --text: #f1f6f2;
+      --muted: #9aaba0;
+      --green: #51d18a;
+      --green-dark: #1e8d58;
+      --line: #29382f;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px 16px;
+      background:
+        radial-gradient(ellipse at 50% 0%, rgba(48, 112, 73, .22), transparent 55%),
+        var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    .app {
+      width: min(100%, 520px);
+      padding: clamp(24px, 6vw, 38px);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: linear-gradient(160deg, rgba(24, 36, 28, .98), rgba(17, 26, 21, .98));
+      box-shadow: 0 24px 80px rgba(0,0,0,.35);
+    }
+    .eyebrow {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      color: var(--green);
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+    .dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 12px rgba(81,209,138,.8);
+    }
+    h1 {
+      margin: 18px 0 6px;
+      text-align: center;
+      font-size: clamp(1.65rem, 6vw, 2.25rem);
+      letter-spacing: -.045em;
+    }
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      text-align: center;
+      font-size: .9rem;
+    }
+    .count-area {
+      margin: 34px 0 26px;
+      padding: 25px 16px;
+      text-align: center;
+      border: 1px solid rgba(81,209,138,.18);
+      border-radius: 22px;
+      background: linear-gradient(145deg, rgba(39,76,53,.35), rgba(24,39,29,.25));
+    }
+    .count {
+      display: block;
+      color: var(--green);
+      font-size: clamp(4.5rem, 19vw, 6.5rem);
+      line-height: 1;
+      font-weight: 800;
+      letter-spacing: -.07em;
+      font-variant-numeric: tabular-nums;
+    }
+    .count-label {
+      display: block;
+      margin-top: 10px;
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .17em;
+      color: #d4e5d9;
+    }
+    .today { margin-top: 12px; color: var(--muted); font-size: .82rem; }
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .stat {
+      padding: 18px 12px;
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      background: rgba(255,255,255,.025);
+      text-align: center;
+    }
+    .stat strong {
+      display: block;
+      font-size: 1.9rem;
+      font-variant-numeric: tabular-nums;
+    }
+    .stat span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: .68rem;
+      font-weight: 750;
+      letter-spacing: .11em;
+    }
+    .progress-heading {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 28px 0 10px;
+      font-size: .85rem;
+      font-weight: 700;
+    }
+    #percentage { color: var(--green); font-variant-numeric: tabular-nums; }
+    .track {
+      height: 11px;
+      overflow: hidden;
+      border-radius: 99px;
+      background: #26352b;
+    }
+    .fill {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--green-dark), var(--green));
+      transition: width .5s ease;
+    }
+    .dates {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 9px;
+      color: var(--muted);
+      font-size: .72rem;
+      font-variant-numeric: tabular-nums;
+    }
+    .message {
+      margin: 27px 0 0;
+      padding-top: 22px;
+      border-top: 1px solid var(--line);
+      text-align: center;
+      font-size: 1rem;
+      font-weight: 750;
+      letter-spacing: -.01em;
+    }
+    .footer {
+      margin-top: 9px;
+      color: var(--muted);
+      text-align: center;
+      font-size: .76rem;
+    }
+    @media (max-width: 360px) {
+      .app { padding: 22px 17px; }
+      .stat strong { font-size: 1.6rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app" aria-live="polite">
+    <div class="eyebrow"><span class="dot"></span> Contagem regressiva</div>
+    <h1>19 de dezembro de 2026</h1>
+    <p class="subtitle">Data final do compromisso</p>
+
+    <section class="count-area" aria-label="Dias restantes">
+      <span class="count" id="remaining">--</span>
+      <span class="count-label" id="remainingLabel">DIAS RESTANTES</span>
+      <div class="today" id="todayText">Calculando a data de hoje...</div>
+    </section>
+
+    <section class="stats" aria-label="Resumo do período">
+      <div class="stat">
+        <strong id="elapsed">--</strong>
+        <span>DIAS DECORRIDOS</span>
+      </div>
+      <div class="stat">
+        <strong id="total">70</strong>
+        <span>DIAS NO TOTAL</span>
+      </div>
+    </section>
+
+    <div class="progress-heading">
+      <span>Progresso da jornada</span>
+      <span id="percentage">--%</span>
+    </div>
+    <div class="track" role="progressbar" aria-label="Progresso do período"
+         aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressBar">
+      <div class="fill" id="progressFill"></div>
+    </div>
+    <div class="dates">
+      <span>10/10/2026</span>
+      <span>19/12/2026</span>
+    </div>
+
+    <p class="message" id="message">Cada dia conta.</p>
+    <p class="footer">Mantenha o foco. Um dia de cada vez.</p>
+  </main>
+
+  <script>
+    // Datas locais, sem horário, para evitar diferenças de fuso horário.
+    const START = new Date(2026, 9, 10); // 10 de outubro de 2026
+    const END   = new Date(2026, 11, 19); // 19 de dezembro de 2026
+    const DAY_MS = 24 * 60 * 60 * 1000;
+
+    const totalDays = Math.round((END - START) / DAY_MS);
+
+    function startOfLocalDay(date) {
+      return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    }
+
+    function formatDate(date) {
+      return new Intl.DateTimeFormat('pt-BR', {
+        day: '2-digit', month: 'long', year: 'numeric'
+      }).format(date);
+    }
+
+    function updateCounter() {
+      const today = startOfLocalDay(new Date());
+      const elapsedRaw = Math.floor((today - START) / DAY_MS);
+      const remainingRaw = Math.ceil((END - today) / DAY_MS);
+
+      const elapsed = Math.min(Math.max(elapsedRaw, 0), totalDays);
+      const remaining = Math.max(remainingRaw, 0);
+      const progress = Math.min(Math.max((elapsed / totalDays) * 100, 0), 100);
+
+      document.getElementById('remaining').textContent = remaining;
+      document.getElementById('elapsed').textContent = elapsed;
+      document.getElementById('total').textContent = totalDays;
+      document.getElementById('percentage').textContent =
+        progress.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
+      document.getElementById('progressFill').style.width = progress + '%';
+      document.getElementById('progressBar').setAttribute('aria-valuenow', progress.toFixed(2));
+      document.getElementById('todayText').textContent = 'Hoje: ' + formatDate(today);
+
+      const label = document.getElementById('remainingLabel');
+      const message = document.getElementById('message');
+
+      if (today < START) {
+        document.getElementById('remaining').textContent = totalDays;
+        label.textContent = 'DIAS ATÉ O INÍCIO';
+        message.textContent = 'A jornada começa em breve.';
+      } else if (today < END) {
+        label.textContent = remaining === 1 ? 'DIA RESTANTE' : 'DIAS RESTANTES';
+        message.textContent = 'Cada dia conta.';
+      } else if (today.getTime() === END.getTime()) {
+        label.textContent = 'É HOJE';
+        message.textContent = 'Chegou a data. Este é o dia.';
+      } else {
+        label.textContent = 'PRAZO CONCLUÍDO';
+        message.textContent = 'O período chegou ao fim.';
+      }
+    }
+
+    updateCounter();
+    // Atualiza ao virar o dia e também quando a página fica aberta.
+    setInterval(updateCounter, 60 * 1000);
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) updateCounter();
+    });
+  </script>
+</body>
+</html>
