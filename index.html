@@ -222,8 +222,7 @@
     alt="Homem e mulher rompendo os laços do passado e buscando liberdade"
     class="symbol-image"
 >
-
-    <p class="footer">Um novo tempo começa.</p>
+    <p class="message" id="message">Um novo tempo começa.</p>
     <p class="footer">Sem pesos, sem prisões, sem medo.</p>
   </main>
 
@@ -272,7 +271,7 @@
         message.textContent = 'A jornada começa em breve.';
       } else if (today < END) {
         label.textContent = remaining === 1 ? 'DIA RESTANTE' : 'DIAS RESTANTES';
-        message.textContent = 'Liberdade de volta.';
+        message.textContent = 'Um novo tempo começa.';
       } else if (today.getTime() === END.getTime()) {
         label.textContent = 'É HOJE';
         message.textContent = 'Chegou a data. Este é o dia.';
